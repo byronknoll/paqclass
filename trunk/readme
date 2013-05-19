@@ -1,0 +1,21 @@
+PAQclass
+Made by Byron Knoll in 2013.
+https://code.google.com/p/paqclass/
+
+PAQclass is a classification algorithm based on a powerful compression program called PAQ8. For more information about PAQ8, see http://cs.fit.edu/~mmahoney/compression/#paq
+
+PAQclass works well for classifying sequential data - such as text documents or time series data. It supports binary or multi-class classification. If your data is continuous, discretizing the data points into a small number of buckets will probably improve performance. For more details on how PAQclass works and how it compares to other classification algorithms, see my thesis: http://www.byronknoll.com/thesis.pdf
+
+PAQclass is designed for Linux. To compile, just type "make". In order to use PAQclass you will need to organize your dataset into a specific folder structure:
+
+Training data: a separate folder should be created for training data. For each label/class in your data, create a subfolder in this training folder. For example, if you have a binary classification task you could have the folder structure: "train/class0" and "train/class1". Put your training data files into the folders that correspond with their label.
+
+Test data: a separate folder should be created for test data. Each data point/document that you want classified should be an individual file in this folder.
+
+To run PAQclass, you just need to specify the location of the training and test folders: "./runner /path/to/train /path/to/test". The output gets printed to standard output, so you can direct it to a file with: "./runner train test > output.tsv". The output is a tab separated file:
+
+The first row contains the column names. Subsequent rows contain data for each test file. The first column is the file name. The second column is the classification. In case you want more control over the output class (such as choosing a threshold for a binary classification task), the corresponding weights for each label are output in the subsequent columns. The weights are the cross-entropy rate of PAQ8 - so a lower value means that the label is a better match. The class that is chosen for the second column is simply the label with the lowest value.
+
+In case you want more control over the performance of PAQclass, you can specify an optional third parameter for the compression level: "./runner train test 2 > output.tsv". This parameter should be between 1 and 8:
+1 = fastest, worst compression, least memory usage
+8 = slowest, best compression, most memory usage
